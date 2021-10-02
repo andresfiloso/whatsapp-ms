@@ -18,10 +18,10 @@
   "homepage": "https://github.com/andresfiloso/whatsapp-ms",
   "dependencies": {
     "@adiwajshing/baileys": "^3.5.1",
+    "async-redis": "^2.0.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "os": "^0.1.2",
-    "redis": "^4.0.0-rc.1",
     "request": "^2.88.2",
     "valid-url": "^1.0.9"
   },

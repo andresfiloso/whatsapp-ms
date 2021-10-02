@@ -14,13 +14,6 @@ client.logger.level = "warn";
   console.log(`API Key: ${process.env.API_KEY}`);
 })();
 
-(async () => {
-  const session = await cache.get("session");
-  if (session) {
-    client.loadAuthInfo(JSON.parse(session));
-  }
-})();
-
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -65,7 +58,19 @@ client.on("chat-update", async (chatUpdate) => {
   }
 });
 
-client.connect();
+(async () => {
+  const session = await cache.get("session");
+  if (session) {
+    console.log("Session founded from cache", session);
+    client.loadAuthInfo(JSON.parse(session));
+  }
+
+  client.connect().catch((err) => {
+    console.log("error trying to connect to whatsapp: ", err);
+    cache.del("session");
+    client.connect();
+  });
+})();
 
 app.use((req, res, next) => {
   console.log(req.method + " : " + req.path);
