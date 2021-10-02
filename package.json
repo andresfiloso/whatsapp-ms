@@ -1,0 +1,30 @@
+{
+  "name": "whatsapp-ms",
+  "description": "whatsapp micro service",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andresfiloso/whatsapp-ms.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "andresfiloso",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andresfiloso/whatsapp-ms/issues"
+  },
+  "homepage": "https://github.com/andresfiloso/whatsapp-ms",
+  "dependencies": {
+    "@adiwajshing/baileys": "^3.5.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "os": "^0.1.2",
+    "request": "^2.88.2",
+    "valid-url": "^1.0.9"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.12"
+  }
+}
