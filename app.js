@@ -1,8 +1,7 @@
 require("dotenv").config();
 const express = require("express");
-const fs = require("fs");
 const { WAConnection } = require("@adiwajshing/baileys");
-
+const cache = require("./cache");
 const chatRoute = require("./routes/chat");
 
 global.client = new WAConnection();
@@ -12,7 +11,14 @@ client.logger.level = "warn";
   if (!process.env.API_KEY) {
     throw Error("API_KEY must be set");
   }
-  console.log(`API Key: ${process.env.API_KEY}`)
+  console.log(`API Key: ${process.env.API_KEY}`);
+})();
+
+(async () => {
+  const session = await cache.get("session");
+  if (session) {
+    client.loadAuthInfo(JSON.parse(session));
+  }
 })();
 
 const app = express();
@@ -21,12 +27,9 @@ const port = process.env.PORT || 5000;
 app.use(express.json({ limit: "50mb" }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-fs.existsSync("./auth_info.json") && client.loadAuthInfo("./auth_info.json");
-
 client.on("open", async () => {
   const authInfo = await client.base64EncodedAuthInfo();
-  fs.writeFileSync("./auth_info.json", JSON.stringify(authInfo, null, "\t"));
+  await cache.set("session", JSON.stringify(authInfo));
 });
 
 client.on("connecting", () => {
@@ -38,7 +41,6 @@ client.on("chats-received", () => {
 });
 
 client.on("chat-update", async (chatUpdate) => {
-
   const isChatReceived = chatUpdate.messages && chatUpdate.count;
   const isChatSended = chatUpdate.messages;
 
