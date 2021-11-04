@@ -5,6 +5,7 @@ const cache = require("./cache");
 const chatRoute = require("./routes/chat");
 
 global.client = new WAConnection();
+client.version = [3, 3234, 9];
 client.logger.level = "warn";
 
 (() => {
