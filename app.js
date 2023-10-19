@@ -15,12 +15,7 @@ const mongoose = require('mongoose');
 let globalQR;
 let isConnected = false;
 
-(() => {
-  if (!process.env.API_KEY) {
-    throw Error('API_KEY must be set');
-  }
-  console.log(`API Key: ${process.env.API_KEY}`);
-
+const connect = async () => {
   // Load the session data
   mongoose.connect(process.env.MONGODB_URI).then(() => {
     const store = new MongoStore({ mongoose: mongoose });
@@ -52,6 +47,15 @@ let isConnected = false;
 
     client.initialize();
   });
+};
+
+(() => {
+  if (!process.env.API_KEY) {
+    throw Error('API_KEY must be set');
+  }
+  console.log(`API Key: ${process.env.API_KEY}`);
+
+  connect();
 })();
 
 const app = express();
@@ -76,6 +80,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/connect', async (req, res) => {
+  await connect();
   if (globalQR) {
     try {
       const qrStream = new PassThrough();
