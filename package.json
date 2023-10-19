@@ -1,31 +1,31 @@
 {
   "name": "whatsapp-ms",
-  "description": "whatsapp micro service",
+  "version": "1.0.0",
+  "description": "",
   "main": "app.js",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "install": "^0.13.0",
+    "mongoose": "^7.6.3",
+    "npm": "^10.2.1",
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.22.1",
+    "wwebjs-mongo": "^1.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/andresfiloso/whatsapp-ms.git"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
-  },
-  "author": "andresfiloso",
-  "license": "MIT",
+  "author": "",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/andresfiloso/whatsapp-ms/issues"
   },
-  "homepage": "https://github.com/andresfiloso/whatsapp-ms",
-  "dependencies": {
-    "@adiwajshing/baileys": "^3.5.1",
-    "async-redis": "^2.0.0",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.1",
-    "os": "^0.1.2",
-    "request": "^2.88.2",
-    "valid-url": "^1.0.9"
-  },
-  "devDependencies": {
-    "@types/fs-extra": "^9.0.12"
-  }
+  "homepage": "https://github.com/andresfiloso/whatsapp-ms#readme"
 }
