@@ -21,6 +21,7 @@ const mongoose = require('mongoose');
   mongoose.connect(process.env.MONGODB_URI).then(() => {
     const store = new MongoStore({ mongoose: mongoose });
     global.client = new Client({
+      puppeteer: { args: ['--no-sandbox', '--disable-dev-shm-usage'] },
       authStrategy: new RemoteAuth({
         store: store,
         backupSyncIntervalMs: 300000,
