@@ -27,6 +27,19 @@ const connect = async () => {
       }),
     });
 
+    client.on('loading_screen', (percent, message) => {
+      console.log('LOADING SCREEN', percent, message);
+    });
+
+    client.on('authenticated', () => {
+      console.log('AUTHENTICATED');
+    });
+
+    client.on('auth_failure', (msg) => {
+      // Fired if session restore was unsuccessful
+      console.error('AUTHENTICATION FAILURE', msg);
+    });
+
     client.on('qr', (qr) => {
       globalQR = qr;
       qrcode.generate(qr, { small: true });
