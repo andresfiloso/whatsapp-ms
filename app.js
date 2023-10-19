@@ -4,18 +4,22 @@ const express = require('express');
 const chatRoute = require('./routes/chat');
 
 const { Client, RemoteAuth } = require('whatsapp-web.js');
+const qrcode = require('qrcode-terminal');
+const QRCode = require('qrcode');
+const { PassThrough } = require('stream');
 
 // Require database
 const { MongoStore } = require('wwebjs-mongo');
 const mongoose = require('mongoose');
+
+let globalQR;
+let isConnected = false;
 
 (() => {
   if (!process.env.API_KEY) {
     throw Error('API_KEY must be set');
   }
   console.log(`API Key: ${process.env.API_KEY}`);
-
-  const qrcode = require('qrcode-terminal');
 
   // Load the session data
   mongoose.connect(process.env.MONGODB_URI).then(() => {
@@ -29,10 +33,12 @@ const mongoose = require('mongoose');
     });
 
     client.on('qr', (qr) => {
+      globalQR = qr;
       qrcode.generate(qr, { small: true });
     });
 
     client.on('ready', () => {
+      isConnected = true;
       console.log('Client is ready!');
     });
 
@@ -69,16 +75,35 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use((req, res, next) => {
-  const apiKey = req.get('API-Key');
-  if (!apiKey || apiKey !== process.env.API_KEY) {
-    res
-      .status(401)
-      .send({ status: 'Unauthorized', message: 'Invalid or Missing Key' });
+app.use('/connect', async (req, res) => {
+  if (globalQR) {
+    try {
+      const qrStream = new PassThrough();
+      const result = await QRCode.toFileStream(qrStream, globalQR, {
+        type: 'png',
+        width: 200,
+        errorCorrectionLevel: 'H',
+      });
+
+      qrStream.pipe(res);
+    } catch (err) {
+      console.error('Failed to return content', err);
+    }
   } else {
-    next();
+    res.status(404).send({ status: 'error', message: 'qr not ready' });
   }
 });
+
+// app.use((req, res, next) => {
+//   const apiKey = req.get('API-Key');
+//   if (!apiKey || apiKey !== process.env.API_KEY) {
+//     res
+//       .status(401)
+//       .send({ status: 'Unauthorized', message: 'Invalid or Missing Key' });
+//   } else {
+//     next();
+//   }
+// });
 
 app.use('/chat', chatRoute);
 

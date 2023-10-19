@@ -8,13 +8,16 @@
     "express": "^4.18.2",
     "install": "^0.13.0",
     "mongoose": "^7.6.3",
+    "nodemon": "^3.0.1",
     "npm": "^10.2.1",
+    "qrcode": "^1.5.3",
     "qrcode-terminal": "^0.12.0",
     "whatsapp-web.js": "^1.22.1",
     "wwebjs-mongo": "^1.1.0"
   },
   "devDependencies": {},
   "scripts": {
+    "dev": "nodemon app.js",
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
